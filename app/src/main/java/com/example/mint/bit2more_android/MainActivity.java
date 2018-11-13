@@ -8,15 +8,29 @@ import android.widget.Toast;
 
 import com.example.mint.bit2more_android.model.Goods;
 import com.example.mint.bit2more_android.util.RVAdapter;
+import com.example.mint.bit2more_android.util.RecyclerViewSpaceItemDecoration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // android 练习手册
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView rv;
     private List<Goods> goods = new ArrayList<>();
+    private Map<String, Integer> spaceValue = new HashMap<String, Integer>();
+
+    // 初始化子项之间的间距距离
+    private void initSpaceValue() {
+
+        spaceValue.put(RecyclerViewSpaceItemDecoration.TOP_DECORATION, 8);
+        spaceValue.put(RecyclerViewSpaceItemDecoration.LEFT_DECORATION, 8);
+        spaceValue.put(RecyclerViewSpaceItemDecoration.RIGHT_DECORATION, 8);
+        spaceValue.put(RecyclerViewSpaceItemDecoration.BOTTOM_DECORATION, 8);
+    }
+
 
     private void initGoogs() {
         for (int i = 0; i < 100; i++) {
@@ -53,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
         initGoogs();
 
+        initSpaceValue();
+
         RVAdapter rvAdapter = new RVAdapter(goods);
 
         // 实现 ItemClikListener 接口
@@ -71,5 +87,8 @@ public class MainActivity extends AppCompatActivity {
         // 设置布局
         rv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
+        // 增加自定义的分割
+        // 这定子项的 边距
+        rv.addItemDecoration(new RecyclerViewSpaceItemDecoration(spaceValue));
     }
 }
