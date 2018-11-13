@@ -1,14 +1,18 @@
 package com.example.mint.bit2more_android;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.mint.bit2more_android.model.Goods;
 import com.example.mint.bit2more_android.util.RVAdapter;
 import com.example.mint.bit2more_android.util.RecyclerViewSpaceItemDecoration;
+import com.example.mint.bit2more_android.widgets.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,5 +94,25 @@ public class MainActivity extends AppCompatActivity {
         // 增加自定义的分割
         // 这定子项的 边距
         rv.addItemDecoration(new RecyclerViewSpaceItemDecoration(spaceValue));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.main_item_search) {
+            // go to search activity
+            startActivity(new Intent(this,SearchActivity.class));
+        }
+
+        return true;
     }
 }
