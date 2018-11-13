@@ -61,8 +61,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
         Goods good = this.goods.get(position);
         Glide.with(holder.iv_image).load(good.getUrl()).into(holder.iv_image);
         holder.tv_detail.setText(good.getDetail());
-        holder.tv_used.setText(String.valueOf(good.getUsedTime()));
-        holder.tv_price.setText(String.valueOf(good.getPrice()));
+        holder.tv_used.setText(String.valueOf(position));
+        holder.tv_price.setText(String.valueOf(position));
 
         if (itemClikListener != null) {
             // 设置点击事件
