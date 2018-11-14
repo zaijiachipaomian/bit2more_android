@@ -1,6 +1,8 @@
 package com.example.mint.bit2more_android;
 
+import android.Manifest;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.mint.bit2more_android.model.Goods;
+import com.example.mint.bit2more_android.util.LocationUtils;
 import com.example.mint.bit2more_android.util.RVAdapter;
 import com.example.mint.bit2more_android.util.RecyclerViewSpaceItemDecoration;
 import com.example.mint.bit2more_android.widgets.SearchActivity;
@@ -19,9 +22,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
 // android 练习手册
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQ_LOCATION = 10002;
     private RecyclerView rv;
     private List<Goods> goods = new ArrayList<>();
     private Map<String, Integer> spaceValue = new HashMap<String, Integer>();
@@ -61,6 +67,38 @@ public class MainActivity extends AppCompatActivity {
 
             goods.add(g);
         }
+
+
+        // 请求当前的GPS 位置
+        if (EasyPermissions.hasPermissions(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            getLocation();
+        } else {
+            EasyPermissions.requestPermissions(this, "需要请求地理定位功能", REQ_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+    }
+
+    private void getLocation() {
+        new Thread(() -> {
+            String location = LocationUtils.getLngAndLat(getApplicationContext());
+            runOnUiThread(() -> {
+                setTitle(location);
+            });
+        }).start();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQ_LOCATION: {
+                getLocation();
+            }
+            break;
+            default: {
+            }
+            break;
+        }
     }
 
     @Override
@@ -98,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -110,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (itemId == R.id.main_item_search) {
             // go to search activity
-            startActivity(new Intent(this,SearchActivity.class));
+            startActivity(new Intent(this, SearchActivity.class));
         }
 
         return true;
